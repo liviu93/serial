@@ -20,9 +20,12 @@ int main(void)
 	tcsetattr(fd, TCSAFLUSH, &tio);
 
 	char buff[2];
-	read(fd, buff, 1);
+
+	printf("Reading...\n");
+	int rd = read(fd, buff, 1);
+	printf("Read %d bytes", rd);
+
 	buff[1] = 0;	
-	
 	printf("%s\n", buff);
 
 	return 0;
