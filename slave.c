@@ -10,8 +10,15 @@ int main(void)
 {
 	char dev[] = "/dev/ttyS0";
 
-	int fd = open(dev, O_RDWR);
-	
+	int fd = open(dev, O_RDWR | O_NOCTTY);
+	fcntl(fd, F_SETFL, 0);
+	struct termios tio;
+	cfmakeraw(&tio);
+	tio.c_cc[VTIME] = 0;
+	tio.c_cc[VMIN] = 1;
+	tio.c_cflag |= B9600;
+	tcsetattr(fd, TCSAFLUSH, &tio);
+
 	char buff[2];
 	read(fd, buff, 1);
 	buff[1] = 0;	
