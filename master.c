@@ -21,8 +21,12 @@ int main(void)
 
 
 
-	write(fd, "A", 1);
-	
+	for (;;) {
+		int wr = write(fd, "A", 1);
+		printf("Written %d bytes", wr);
+		tcdrain(fd);
+		sleep(1);
+	}
 	return 0;
 }
 
