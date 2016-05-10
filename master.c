@@ -21,8 +21,9 @@ int main(void)
 
 
 	int total = 0;
+	char w[] = "ABCDE";
 	for (;;) {
-		int wr = write(fd, "A", 1);
+		int wr = write(fd, w, 5);
 		total += wr;
 		tcdrain(fd);
 		printf("Written %d bytes [%d]\n", wr, total);

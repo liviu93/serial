@@ -19,17 +19,17 @@ int main(void)
 	tio.c_cflag |= B9600;
 	tcsetattr(fd, TCSAFLUSH, &tio);
 
-	char buff[2];
+	char buff[6];
 
 	printf("Reading...\n");
 	int total = 0;
 
 	for (;;) {
-		int rd = read(fd, buff, 1);
+		int rd = read(fd, buff, 5);
 		total += rd;
 		printf("Read %d bytes [%d]\n", rd, total);
 
-		buff[1] = 0;	
+		buff[5] = 0;	
 		printf("%s\n", buff);
 	}
 
