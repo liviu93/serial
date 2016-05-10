@@ -23,8 +23,8 @@ int main(void)
 
 	for (;;) {
 		int wr = write(fd, "A", 1);
-		printf("Written %d bytes", wr);
 		tcdrain(fd);
+		printf("Written %d bytes\n", wr);
 		sleep(1);
 	}
 	return 0;
