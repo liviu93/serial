@@ -30,7 +30,7 @@ int main(void)
 		printf("Read %d bytes [%d]\n", rd, total);
 
 		buff[5] = 0;	
-		printf("%s\n", buff);
+		printf("%*.s\n", rd, buff);
 	}
 
 	return 0;
