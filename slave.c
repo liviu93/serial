@@ -22,11 +22,16 @@ int main(void)
 	char buff[2];
 
 	printf("Reading...\n");
-	int rd = read(fd, buff, 1);
-	printf("Read %d bytes", rd);
+	int total = 0;
 
-	buff[1] = 0;	
-	printf("%s\n", buff);
+	for (;;) {
+		int rd = read(fd, buff, 1);
+		total += rd;
+		printf("Read %d bytes [%d]\n", rd, total);
+
+		buff[1] = 0;	
+		printf("%s\n", buff);
+	}
 
 	return 0;
 }
