@@ -20,11 +20,12 @@ int main(void)
 	tcsetattr(fd, TCSAFLUSH, &tio);
 
 
-
+	int total = 0;
 	for (;;) {
 		int wr = write(fd, "A", 1);
+		total += wr;
 		tcdrain(fd);
-		printf("Written %d bytes\n", wr);
+		printf("Written %d bytes [%d]\n", wr, total);
 		sleep(1);
 	}
 	return 0;
