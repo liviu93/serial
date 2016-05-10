@@ -2,4 +2,4 @@
 
 git add .
 git commit -m "debugging"
-git push -u
+git push -u origin master
