@@ -48,7 +48,6 @@ int main(void)
 		printf("iqueue = %d\n", bytes); 
 
 		int rd = read(fd, buff, 5);
-		tcflush(fd, TCIFLUSH);
 		total += rd;
 		printf("Read %d bytes [%d]\n", rd, total);
 		
