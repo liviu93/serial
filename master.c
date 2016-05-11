@@ -31,7 +31,7 @@ int main(void)
 	options.c_cc[VTIME] = 0;
 	options.c_cc[VMIN] = 5;
     
-    tcsetattr(fd, TCSANOW, &options);
+    tcsetattr(fd, TCSAFLUSH, &options);
 
 
 
