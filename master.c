@@ -22,18 +22,17 @@ int main(void)
     options.c_cflag &= ~CSTOPB;
 	options.c_cflag &= ~CSIZE;
     options.c_cflag |= CS8;
-    options.c_cflag &= ~( ICANON | ECHO | ECHOE |ISIG );
+    //options.c_cflag &= ~( ICANON | ECHO | ECHOE |ISIG );
     options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
     		                | INLCR | IGNCR | ICRNL | IXON);
     options.c_oflag &= ~OPOST;
 
-	cfmakeraw(&options);
+	//cfmakeraw(&options);
 
 	options.c_cc[VTIME] = 0;
 	options.c_cc[VMIN] = 5;
     
-    tcsetattr(fd, TCSAFLUSH, &options);
-
+    tcsetattr(fd, TCSANOW, &options);
 
 
 
