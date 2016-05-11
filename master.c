@@ -44,12 +44,13 @@ int main(void)
 		total += wr;
 		tcdrain(fd);
 
+		sleep(1);
+
 		int bytes = 0;
 		ioctl(fd, FIONREAD, &bytes);
 		printf("iqueue = %d\n", bytes); 
 
 		printf("Written %d bytes [%d]\n", wr, total);
-		sleep(1);
 	//}
 	return 0;
 }
