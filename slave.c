@@ -50,6 +50,7 @@ int main(void)
 		int rd = read(fd, buff, 5);
 		total += rd;
 		ioctl(fd, FIONREAD, &bytes);
+		tcflush(fd, TCIFLUSH);
 		printf("After: iqueue = %d\n", bytes); 
 		printf("Read %d bytes [%d]\n", rd, total);
 		printf("=================");
