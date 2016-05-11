@@ -10,7 +10,7 @@ int main(void)
 {
 	char dev[] = "/dev/ttyS0";
 
-	int fd = open(dev, O_RDWR | O_NOCTTY);
+	int fd = open(dev, O_RDWR| O_NOCTTY);
 	struct termios options;
    	tcgetattr(fd, &options);
 
@@ -25,6 +25,9 @@ int main(void)
     options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
     		                | INLCR | IGNCR | ICRNL | IXON);
     options.c_oflag &= ~OPOST;
+
+	
+	cfmakeraw(&options);
 
 	options.c_cc[VTIME] = 0;
 	options.c_cc[VMIN] = 5;

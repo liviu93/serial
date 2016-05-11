@@ -26,6 +26,8 @@ int main(void)
     		                | INLCR | IGNCR | ICRNL | IXON);
     options.c_oflag &= ~OPOST;
 
+	cfmakeraw(&options);
+
 	options.c_cc[VTIME] = 0;
 	options.c_cc[VMIN] = 5;
     
