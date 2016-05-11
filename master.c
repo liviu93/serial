@@ -38,7 +38,7 @@ int main(void)
 
 	int total = 0;
 	char w[] = "ABCDE";
-	for (;;) {
+	//for (;;) {
 		int wr = write(fd, w, 5);
 		total += wr;
 		tcdrain(fd);
@@ -49,7 +49,7 @@ int main(void)
 
 		printf("Written %d bytes [%d]\n", wr, total);
 		sleep(1);
-	}
+	//}
 	return 0;
 }
 
