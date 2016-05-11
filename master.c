@@ -23,6 +23,7 @@ int main(void)
 	//options.c_cflag &= ~CSIZE;
     options.c_cflag |= CS8;
     //options.c_cflag &= ~( ICANON | ECHO | ECHOE |ISIG );
+    options.c_cflag &= ~( ECHO | ECHOE |ISIG );
     //options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
    // 		                | INLCR | IGNCR | ICRNL | IXON);
     //options.c_oflag &= ~OPOST;
