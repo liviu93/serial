@@ -17,21 +17,21 @@ int main(void)
 
     cfsetispeed(&options, B9600);
     cfsetospeed(&options, B9600);
-	options.c_cflag |= (CLOCAL | CREAD);
-    options.c_cflag &= ~PARENB;
-    options.c_cflag &= ~CSTOPB;
-	options.c_cflag &= ~CSIZE;
+	//options.c_cflag |= (CLOCAL | CREAD);
+    //options.c_cflag &= ~PARENB;
+    //options.c_cflag &= ~CSTOPB;
+	//options.c_cflag &= ~CSIZE;
     options.c_cflag |= CS8;
     //options.c_cflag &= ~( ICANON | ECHO | ECHOE |ISIG );
-    options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
-    		                | INLCR | IGNCR | ICRNL | IXON);
-    options.c_oflag &= ~OPOST;
+    //options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
+   // 		                | INLCR | IGNCR | ICRNL | IXON);
+    //options.c_oflag &= ~OPOST;
 
 	
 	//cfmakeraw(&options);
 
-	options.c_cc[VTIME] = 0;
-	options.c_cc[VMIN] = 5;
+	//options.c_cc[VTIME] = 0;
+	//options.c_cc[VMIN] = 5;
     
     tcsetattr(fd, TCSANOW, &options);
 
