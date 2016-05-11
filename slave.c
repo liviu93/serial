@@ -42,6 +42,7 @@ int main(void)
 	int total = 0;
 
 	for (;;) {
+		tcflush(fd, TCOFLUSH);
 		int rd = read(fd, buff, 5);
 		tcflush(fd, TCIFLUSH);
 		total += rd;
