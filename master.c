@@ -14,8 +14,8 @@ int main(void)
 	struct termios options;
    	tcgetattr(fd, &options);
 
-    cfsetispeed(&options, B115200);
-    cfsetospeed(&options, B115200);
+    cfsetispeed(&options, B9600);
+    cfsetospeed(&options, B9600);
 	options.c_cflag |= (CLOCAL | CREAD);
     options.c_cflag &= ~PARENB;
     options.c_cflag &= ~CSTOPB;
