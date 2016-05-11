@@ -43,7 +43,11 @@ int main(void)
 		int wr = write(fd, w, 5);
 		total += wr;
 		tcdrain(fd);
-		printf("iqueue = %d\n", ioctl(fd, FIONREAD));
+
+		int bytes = 0;
+		ioctl(fd, FIONREAD, &bytes);
+		printf("iqueue = %d\n", bytes); 
+
 		printf("Written %d bytes [%d]\n", wr, total);
 		sleep(1);
 	}

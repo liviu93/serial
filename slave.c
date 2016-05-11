@@ -43,7 +43,10 @@ int main(void)
 	int total = 0;
 
 	for (;;) {
-		printf("iqueue = %d\n", ioctl(fd, FIONREAD));
+		int bytes = 0;
+		ioctl(fd, FIONREAD, &bytes);
+		printf("iqueue = %d\n", bytes); 
+
 		int rd = read(fd, buff, 5);
 		tcflush(fd, TCIFLUSH);
 		total += rd;
