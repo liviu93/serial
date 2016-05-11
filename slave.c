@@ -11,13 +11,26 @@ int main(void)
 	char dev[] = "/dev/ttyS0";
 
 	int fd = open(dev, O_RDWR | O_NOCTTY);
-	fcntl(fd, F_SETFL, 0);
-	struct termios tio;
-	cfmakeraw(&tio);
-	tio.c_cc[VTIME] = 0;
-	tio.c_cc[VMIN] = 1;
-	tio.c_cflag |= B9600;
-	tcsetattr(fd, TCSAFLUSH, &tio);
+	struct termios options;
+   	tcgetattr(fd, &options);
+
+    cfsetispeed(&options, B115200);
+    cfsetospeed(&options, B115200);
+	options.c_cflag |= (CLOCAL | CREAD);
+    options.c_cflag &= ~PARENB;
+    options.c_cflag &= ~CSTOPB;
+	options.c_cflag &= ~CSIZE;
+    options.c_cflag |= CS8;
+    options.c_cflag &= ~( ICANON | ECHO | ECHOE |ISIG );
+    options.c_iflag &= ~(IXON | IXOFF | IXANY );
+    options.c_oflag &= ~OPOST;
+
+	options.c_cc[VTIME] = 0;
+	options.c_cc[VMIN] = 1;
+    
+    tcsetattr(fd, TCSANOW, &options);
+
+
 
 	char buff[6];
 
