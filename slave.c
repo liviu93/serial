@@ -43,6 +43,7 @@ int main(void)
 
 	for (;;) {
 		int rd = read(fd, buff, 5);
+		tcflush(fd, TCIFLUSH);
 		total += rd;
 		printf("Read %d bytes [%d]\n", rd, total);
 		
