@@ -10,7 +10,7 @@ int main(void)
 {
 	char dev[] = "/dev/ttyS0";
 
-	int fd = open(dev, O_RDONLY | O_NOCTTY);
+	int fd = open(dev, O_RDWR | O_NOCTTY);
 	struct termios options;
    	tcgetattr(fd, &options);
 
@@ -43,7 +43,6 @@ int main(void)
 		total += rd;
 		printf("Read %d bytes [%d]\n", rd, total);
 
-		buff[5] = 0;	
 		printf("%*.s\n", rd, buff);
 	}
 
