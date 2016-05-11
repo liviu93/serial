@@ -43,6 +43,7 @@ int main(void)
 		int wr = write(fd, w, 5);
 		total += wr;
 		tcdrain(fd);
+		tcflush(fd, TCIOFLUSH);
 
 		sleep(1);
 
