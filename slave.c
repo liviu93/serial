@@ -46,7 +46,7 @@ int main(void)
 		total += rd;
 		printf("Read %d bytes [%d]\n", rd, total);
 
-		printf("%*.s\n", rd, buff);
+		printf("%s\n", buff);
 	}
 
 	return 0;
