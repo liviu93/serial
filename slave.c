@@ -10,7 +10,7 @@ int main(void)
 {
 	char dev[] = "/dev/ttyS0";
 
-	int fd = open(dev, O_RDWR | O_NOCTTY);
+	int fd = open(dev, O_RDONLY | O_NOCTTY);
 	struct termios options;
    	tcgetattr(fd, &options);
 
