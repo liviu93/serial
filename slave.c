@@ -45,7 +45,8 @@ int main(void)
 		int rd = read(fd, buff, 5);
 		total += rd;
 		printf("Read %d bytes [%d]\n", rd, total);
-
+		
+		buff[5] = 0;
 		printf("%s\n", buff);
 	}
 
