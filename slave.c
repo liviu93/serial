@@ -4,6 +4,7 @@
 #include <sys/select.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/ioctl.h>
 #include <fcntl.h>
 
 int main(void)
@@ -42,7 +43,7 @@ int main(void)
 	int total = 0;
 
 	for (;;) {
-		tcflush(fd, TCOFLUSH);
+		printf("iqueue = %d\n", ioctl(fd, FIONREAD));
 		int rd = read(fd, buff, 5);
 		tcflush(fd, TCIFLUSH);
 		total += rd;

@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <sys/ioctl.h>
 
 int main(void)
 {
@@ -42,6 +43,7 @@ int main(void)
 		int wr = write(fd, w, 5);
 		total += wr;
 		tcdrain(fd);
+		printf("iqueue = %d\n", ioctl(fd, FIONREAD));
 		printf("Written %d bytes [%d]\n", wr, total);
 		sleep(1);
 	}
