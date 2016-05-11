@@ -45,10 +45,12 @@ int main(void)
 	for (;;) {
 		int bytes = 0;
 		ioctl(fd, FIONREAD, &bytes);
-		printf("iqueue = %d\n", bytes); 
+		printf("Before: iqueue = %d\n", bytes); 
 
 		int rd = read(fd, buff, 5);
 		total += rd;
+		ioctl(fd, FIONREAD, &bytes);
+		printf("Before: iqueue = %d\n", bytes); 
 		printf("Read %d bytes [%d]\n", rd, total);
 		
 		buff[5] = 0;
