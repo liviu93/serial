@@ -1,58 +1,99 @@
-#include <unistd.h>
-#include <stdio.h>
-#include <sys/termios.h>
-#include <sys/select.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <sys/ioctl.h>
+#include "utils.h"
+#include <string.h>
+
+//int creat_wr_pkt(void *data, short num, struct packet *pkt)
 
 int main(void)
 {
-	char dev[] = "/dev/ttyS0";
 
-	int fd = open(dev, O_RDWR | O_NOCTTY);
-	struct termios options;
-   	tcgetattr(fd, &options);
+	struct res *rs = res_init();
+	// res_set(rs);
+	//
+	//
+	
 
-    cfsetispeed(&options, B9600);
-    cfsetospeed(&options, B9600);
-	//options.c_cflag |= (CLOCAL | CREAD);
-    //options.c_cflag &= ~PARENB;
-    //options.c_cflag &= ~CSTOPB;
-	//options.c_cflag &= ~CSIZE;
-    options.c_cflag |= CS8;
-    //options.c_cflag &= ~( ICANON | ECHO | ECHOE |ISIG );
-    options.c_cflag &= ~( ECHO | ECHOE |ISIG );
-    //options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
-   // 		                | INLCR | IGNCR | ICRNL | IXON);
-    //options.c_oflag &= ~OPOST;
+	char data[] = "Whenever the receiver "
+		"receives a packet, the receiver calculates exactly "
+		"the same checksum or CRC, then comparesi"
+		"it to the one in the footer/trailer. If they match,"
+		"the entire packet is (almost certainly) good, so the receiver sends an ACK.";
 
-	//cfmakeraw(&options);
+	struct packet pkt;
+	/*
+	pkt.header = 'O';
+	pkt.crc[0] = 'A';
+	pkt.crc[1] = 'B';
+	pkt.num = 0;
+	memcpy(pkt.data, data, DATSIZ);
+	
+	
+	for(int i = 0; i<1000; i++) {
+	
+		write(rs->fd[WR], &pkt, sizeof(struct packet));
 
-	//options.c_cc[VTIME] = 0;
-	//options.c_cc[VMIN] = 5;
-    
-    tcsetattr(fd, TCSANOW, &options);
+		//char buf[3];
+		//sleep(2);
+		//int rd = read(rs->fd[RD], buf, 2);
+		//tcflush(rs->fd[RD], TCIFLUSH);
 
+		//if (strncmp(buf, "OK", 2) == 0){
+		//	printf("OK\n");
+		//} else {
+		//	printf("BAD PKT %*.s\n", rd, buf);
+		//}
 
+		//getchar();
 
-	int total = 0;
-	char w[] = "ABCDE";
-	//for (;;) {
-		int wr = write(fd, w, 5);
-		total += wr;
-		tcdrain(fd);
-		tcflush(fd, TCIOFLUSH);
+	}
+	*/
+	
+	int num = 0;
+	int ok = 0;
+	do {
+		pkt.tail = TAIL;
+		pkt.header = ACK;
+		pkt.num = ++num;
+		int offset = num - 1;
+		int to_send = strlen(data) - (offset * DATSIZ);
+		memset(pkt.data, 0, DATSIZ);
 
+		if (to_send > DATSIZ) {
+			ok = 1;
+			memcpy(pkt.data, data + offset * DATSIZ, DATSIZ);
+		} else {
+			ok = 0;
+			memcpy(pkt.data, data + offset * DATSIZ, to_send);
+		}
+
+		pkt.crc = get_crc(pkt.data);
+
+		write(rs->fd[WR], &pkt, sizeof(struct packet));
+		tcdrain(rs->fd[WR]);
 		sleep(1);
 
 		int bytes = 0;
-		ioctl(fd, FIONREAD, &bytes);
-		printf("iqueue = %d\n", bytes); 
+		ioctl(rs->fd[RD], FIONREAD, &bytes);
+/*
+		if (bytes != 0) 
+		{
+			short pkt_num;
+			read(rs->fd[RD], &pkt_num, sizeof(short));
+			printf("Read bytes = %d\n", pkt_num);
+			num = pkt_num;
+		} else
+		{
+			printf("Ok\n");
+		}
+*/
+	print_pkt(&pkt);
+	//getchar();
+		
+	} while (ok != 0);
 
-		printf("Written %d bytes [%d]\n", wr, total);
-	//}
+
+
+
+
 	return 0;
 }
 

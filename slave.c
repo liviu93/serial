@@ -1,63 +1,80 @@
-#include <unistd.h>
-#include <stdio.h>
-#include <sys/termios.h>
-#include <sys/select.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/ioctl.h>
-#include <fcntl.h>
+#include "utils.h"
+#include <string.h>
 
 int main(void)
 {
-	char dev[] = "/dev/ttyS0";
 
-	int fd = open(dev, O_RDWR| O_NOCTTY);
-	struct termios options;
-   	tcgetattr(fd, &options);
-
-    cfsetispeed(&options, B9600);
-    cfsetospeed(&options, B9600);
-	//options.c_cflag |= (CLOCAL | CREAD);
-    //options.c_cflag &= ~PARENB;
-    //options.c_cflag &= ~CSTOPB;
-	//options.c_cflag &= ~CSIZE;
-    options.c_cflag |= CS8;
-    options.c_cflag &= ~( ECHO | ECHOE |ISIG );
-    //options.c_cflag &= ~( ICANON | ECHO | ECHOE |ISIG );
-    //options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
-   // 		                | INLCR | IGNCR | ICRNL | IXON);
-    //options.c_oflag &= ~OPOST;
-
+	struct res *rs = res_init();
 	
-	//cfmakeraw(&options);
-
-	//options.c_cc[VTIME] = 0;
-	//options.c_cc[VMIN] = 5;
-    
-    tcsetattr(fd, TCSANOW, &options);
+	
+	printf("START!!!!!!\n");
+	printf("START!!!!!!\n");
 
 
+	struct packet_ctl pkt_ctl = {0};
 
-	char buff[6];
 
-	printf("Reading...\n");
-	int total = 0;
 
-	for (;;) {
-		int bytes = 0;
-		ioctl(fd, FIONREAD, &bytes);
-		printf("Before: iqueue = %d\n", bytes); 
-
-		int rd = read(fd, buff, 5);
-		total += rd;
-		ioctl(fd, FIONREAD, &bytes);
-		tcflush(fd, TCIFLUSH);
-		printf("After: iqueue = %d\n", bytes); 
-		printf("Read %d bytes [%d]\n", rd, total);
-		printf("=================");
+	for(;;) {
 		
-		buff[5] = 0;
-		printf("%s\n", buff);
+		pkt_ctl.prev_pkt = pkt_ctl.curr_pkt;
+		size_t pkt_size = sizeof(struct packet);
+		int rdnum = read(rs->fd[RD], &pkt_ctl.curr_pkt, pkt_size);
+		printf("\tPREV\n");
+		print_pkt(&pkt_ctl.prev_pkt);
+		printf("\tCURR\n");
+		print_pkt(&pkt_ctl.curr_pkt);
+
+		short new_crc = get_crc(pkt_ctl.curr_pkt.data);
+
+
+		if (pkt_ctl.curr_pkt.num - pkt_ctl.prev_pkt.num != 1) {
+			printf("diff != 1 \n");
+			continue;
+		}
+
+		if (rdnum != pkt_size) {
+			printf("rdnum != pkt_size \n");
+			continue;
+		}
+
+		if (new_crc != pkt_ctl.curr_pkt.crc) {
+			printf("crc != new_crc \n");
+			continue;
+		}
+
+		if (pkt_ctl.curr_pkt.header != ACK) {
+			printf("header != ACK \n");
+			continue;
+		}
+/*
+		if (
+				rdnum != pkt_size ||
+				pkt_ctl.curr_pkt.num - pkt_ctl.prev_pkt.num != 1 || 
+				new_crc != pkt_ctl.curr_pkt.crc ||
+				pkt_ctl.curr_pkt.header != ACK
+			) {
+
+			//short next_num = pkt_ctl.prev_pkt.num + 1;
+			//write(rs->fd[WR], &next_num, sizeof(short));
+			//tcdrain(rs->fd[WR]);
+
+			printf("WRONG PACKET !\n");
+			continue;
+		}
+*/
+
+
+
+
+		//int bytes = 0;
+		//do
+		//{
+		//	ioctl(rs->fd[RD], FIONREAD, &bytes);
+		//	printf("bytes after write %d\n", bytes);
+		//	sleep(1);
+		//} while (bytes == 0);
+
 	}
 
 	return 0;

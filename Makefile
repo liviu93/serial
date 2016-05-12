@@ -1,7 +1,7 @@
 CC = gcc
 
-SRC_M = master.c
-SRC_S = slave.c
+SRC_M = utils.c master.c 
+SRC_S = utils.c slave.c
 
 OBJ_M = master
 OBJ_S = slave
