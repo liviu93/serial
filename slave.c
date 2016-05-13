@@ -24,8 +24,8 @@ int exec_cmd()
 	printf("[%s] \n", cmds.exec);
 	fp = popen(cmds.exec, "r");
 
-	int rdnum = fread(cmds.out, BUFSIZE, 1, fp);
-	cmds.out[rdnum - 1] = 0;
+	memset(cmds.out, 0, BUFSIZE);
+	fread(cmds.out, BUFSIZE, 1, fp);
 	pclose(fp);
 	
 	return 0;
