@@ -1,0 +1,5 @@
+popen(3) is just a library function, which relies on fork(2) and pipe(2) to do the real work.
+
+However pipe(2) can only create unidirectional pipes. To send the child process input, and also capture the output, you need to open two pipes.
+
+If you want to capture the stderr too, that's possible, but then you'll need three pipes, and a select loop to arbitrate reads between the stdout and stderr streams.
